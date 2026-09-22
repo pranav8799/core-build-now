@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowLeft, Pencil, Power, PowerOff, MapPin, Clock } from "lucide-react";
 import { toast } from "sonner";
 
@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/tenants/$tenantId")({
-  validateSearch: (search: Record<string, unknown>) => ({ edit: search.edit === true || search.edit === "true" }),
   head: () => ({
     meta: [
       { title: "Tenant Detail — System Administrator Panel" },
@@ -38,15 +37,10 @@ export const Route = createFileRoute("/tenants/$tenantId")({
 
 function TenantDetailPage() {
   const { tenantId } = Route.useParams();
-  const { edit } = Route.useSearch();
   const navigate = useNavigate();
   const { tenants, updateTenant, toggleTenantStatus } = useAdminStore();
   const tenant = tenants.find((t) => t.id === tenantId);
-  const [editOpen, setEditOpen] = useState(edit);
-
-  useEffect(() => {
-    if (edit) setEditOpen(true);
-  }, [edit]);
+  const [editOpen, setEditOpen] = useState(false);
 
   if (!tenant) {
     return (
@@ -187,12 +181,7 @@ function TenantDetailPage() {
 
       <TenantFormDrawer
         open={editOpen}
-        onOpenChange={(open) => {
-          setEditOpen(open);
-          if (!open && edit) {
-            navigate({ to: "/tenants/$tenantId", params: { tenantId }, search: { edit: false } });
-          }
-        }}
+        onOpenChange={setEditOpen}
         tenant={tenant}
         onSubmit={(input) => {
           updateTenant(tenant.id, input);

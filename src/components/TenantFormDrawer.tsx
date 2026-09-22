@@ -41,7 +41,7 @@ const emptyState = {
   email: "",
   mobile: "",
   organization: "",
-  designation: DESIGNATIONS[0],
+  designation: "Relationship Manager",
   status: "Active" as TenantStatus,
 };
 
@@ -295,7 +295,7 @@ function Field({
 }: {
   label: string;
   required?: boolean;
-  error?: string;
+  error?: string | undefined;
   children: React.ReactNode;
 }) {
   return (

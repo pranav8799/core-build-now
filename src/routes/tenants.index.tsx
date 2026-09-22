@@ -237,7 +237,6 @@ function TenantsPage() {
                                 navigate({
                                   to: "/tenants/$tenantId",
                                   params: { tenantId: t.id },
-                                  search: { edit: true },
                                 })
                               }
                             >
